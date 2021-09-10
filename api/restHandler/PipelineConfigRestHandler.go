@@ -674,8 +674,9 @@ func (handler PipelineConfigRestHandlerImpl) PatchCdPipeline(w http.ResponseWrit
 	if len(force) > 0 {
 		forceDelete, err = strconv.ParseBool(force)
 		if err != nil {
-			forceDelete = false
-			err = nil
+			handler.Logger.Errorw("request err, PatchCdPipeline", "err", err, "payload", cdPipeline)
+			writeJsonResp(w, err, nil, http.StatusBadRequest)
+			return
 		}
 	}
 	cdPipeline.ForceDelete = forceDelete
